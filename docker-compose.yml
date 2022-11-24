@@ -1,0 +1,54 @@
+version: "3.9"
+volumes:
+  php-fpm-socket:
+  db-store:
+services:
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: ./infra/docker/php/Dockerfile
+    ports:
+      - 5173:5173
+    volumes:
+      - php-fpm-socket:/var/run/php-fpm
+      - ./src:/work/src
+      - ./infra/docker/php/php.ini:/usr/local/etc/php/php.ini
+      - ./infra/docker/php/xdebug.ini:/etc/confd/templates/xdebug.ini.tmpl
+
+  web:
+    container_name: web
+    build:
+      context: .
+      dockerfile: ./infra/docker/nginx/Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - php-fpm-socket:/var/run/php-fpm
+      - ./src:/work/src
+
+  db:
+    container_name: db
+    image: postgres:14.5
+    ports:
+      - 5432:5432
+    volumes:
+      - db-store:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=laravel_local
+      - POSTGRES_USER=phper
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_ROOT_PASSWORD=secret
+      - TZ=Asia/Tokyo
+
+  db_test:
+    container_name: db_test
+    image: postgres:14.5
+    ports:
+      - 15432:5432
+    environment:
+      - POSTGRES_DB=laravel_test
+      - POSTGRES_USER=phper
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_ROOT_PASSWORD=secret
+      - TZ=Asia/Tokyo

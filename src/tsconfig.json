@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noEmit": true,
+        "esModuleInterop": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "jsx": "preserve",
+        "types": ["vitest/globals", "./node_modules/@types", "./resources/ts/types"],
+        "baseUrl": ".",
+        "paths": {
+            "~/*": ["./resources/ts/*"]
+        },
+        "incremental": true,
+        "isolatedModules": true
+    },
+    "include": ["**/index.d.ts", "**/*.ts", "**/*.tsx"],
+    "exclude": ["node_modules"]
+}
